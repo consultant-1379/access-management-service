@@ -1,0 +1,217 @@
+{% extends 'base.layout.tmpl.html' %}
+{% load django_tables2 %}
+
+
+
+{% block "navi-bar" %}
+      <nav class="appbar">
+        <div class="actions-left">
+          <div class="item">
+            <i class="navigation-toggle closed"></i>
+          </div>
+          <div class="menu-anchor open-menu">Menu</div>
+          <div class="title open-menu">
+            <span class="title-name">AMS</span>
+            <span class="subtitle">My Pool Environments</span>
+          </div>
+        </div>
+        <div class="actions-right"></div>
+      </nav>
+{% endblock %}
+
+{% block  "navigation" %}
+  <li><a class="item" href="/">Home</a></li>
+  <li><a class="item " href="/about">About</a></li>
+  {% if user.is_authenticated %}
+  <li><a class="item" href="{% url 'manager:my_profile' %}">My Profile</a></li>
+  <li>
+    <span class="title closed item">Accounts</span>
+      <ul>
+        <li><a class="item active" href="{% url 'manager:accounts_list' %}" id="accounts" class="item">List</a></li>
+        <li><a href="{% url 'manager:account_order' %}"class="item">Order</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:account_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  <li>
+    <span class="title closed item">Systems</span>
+      <ul>
+        <li><a href="{% url 'manager:systems_list' %}" class="item">List</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:system_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  
+  <li>
+    <span class="title closed item">Orders</span>
+      <ul>
+        <li><a href="{% url 'manager:orders_list' %}" class="item">List</a></li>
+        {% if user.is_approver or user.is_operator %}
+        <li><a href="{% url 'manager:order_manage' %}"class="item">Pending Approvals</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  {% if user.is_pool_user or user.is_pool_admin %}
+  <li>
+    <span class="title closed item">Pool Environments</span>
+      <ul>
+        {% if user.is_pool_admin %}
+          <li><a href="{% url 'pool-test-environment:pool-data' %}" class="item">List</a></li>
+          <li><a href="{% url 'pool-test-environment:booking-requests' %}" class="item">Booking Requests</a></li>
+        {% endif %}
+        <li><a href="{% url 'pool-test-environment:my-pool-environments' %}" class="item">My Pool Environments</a></li>
+        <li><a href="{% url 'pool-test-environment:request-pool-environment' %}" class="item">Request Environment</a></li>
+      </ul>
+  </li>
+  {% endif %}
+  
+  {% if user.is_adminstrator %}
+  <li>
+    <span class="title closed item">Admin Panel</span>
+      <ul>
+        <li><a href="{% url 'manager:area_list' %}"class="item">Manage Areas</a></li>
+        <li><a href="{% url 'manager:system_type_list' %}"class="item">Manage System Types</a></li>
+        <li><a href="{% url 'manager:approver_list' %}"class="item">Manage Approvers</a></li>
+      </ul>
+  </li>
+  {% endif %}
+  
+  {% endif %}
+{% endblock %}
+
+{% block "content" %}
+
+<!-- <div class="table-middle">
+  
+
+</div> -->
+
+<!-- Test Filter Accordion
+ -->
+
+<div class="row" style="overflow: auto;">
+  <div class="col-md-12">
+    <a href="{% url 'pool-test-environment:request-pool-environment' %}" class="btn"><i class="icon icon-tasks"></i>Order Enviroment</a>
+  </div>
+  
+  <!-- <div class="col-md-12">
+    <div class="accordion lines">
+      <ul>
+        <li tabindex="0">
+          <div class="title" allin>Filters<i class="icon icon-filter"></i></div>
+            
+          <div class="content">
+            <form method="get" class="eds-filter horizontal">
+              {{ filter.form.as_p }}
+              <button type="submit" value="Filter">Filter</button>
+            </form>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div> -->
+
+  <div class="col-md-12">
+    {% if user.is_pool_user or user.is_pool_admin %}
+      {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+      {% endif %}
+      
+      {% if table.data %}
+        <h2>Active Bookings Team - {{ table.data.0.booking.team.name }}</h2>
+        {% render_table table %}
+      
+      {% else %}
+      <h2>No Active Bookings for Your Team - Order an Enviroment above</h2>
+      {% endif %}
+
+    {% endif %}
+   
+  </div>
+
+
+<!-- Application: Content
+{% render_table table %} -->
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+{% block "js" %}
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+
+    function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = cookies[i].trim();
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+    
+    //Test for non-redirect trigger
+    document.querySelectorAll('.table-container .item').forEach(item => {
+      item.addEventListener('click', function() {
+        var id = this.parentNode.parentNode.dataset.id;
+        var name = this.parentNode.parentNode.dataset.name;
+        var action = this.textContent.trim().toLowerCase().replace(' ', '-');
+        var confirmed = confirm(`Are you sure you want to ${action} for namespace ${name}?`);
+        if (confirmed) {
+            fetch(`/pool-deployments/trigger_jenkins/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                    name: name,
+                    namespace_id: id,
+                    action: action
+                })
+            }).then(response => response.text())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+      });
+    });
+    
+
+  </script>
+    
+{% endblock %}
+
+
+
+
+

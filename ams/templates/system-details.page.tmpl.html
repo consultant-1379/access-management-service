@@ -1,0 +1,369 @@
+{% extends 'base.layout.tmpl.html' %}
+{% load render_table from django_tables2 %} 
+{% load widget_tweaks %} 
+
+{% block "navi-bar" %}
+      <nav class="appbar">
+        <div class="actions-left">
+          <div class="item">
+            <i class="navigation-toggle closed"></i>
+          </div>
+          <div class="menu-anchor open-menu">Menu</div>
+          <div class="title open-menu">
+            <span class="title-name">AMS</span>
+            <span class="subtitle">Systems</span>
+          </div>
+        </div>
+        <div class="actions-right"></div>
+      </nav>
+{% endblock %}
+
+
+{% block  "navigation" %}
+  <li><a class="item" href="/">Home</a></li>
+  <li><a class="item" href="/about">About</a></li>
+  {% if user.is_authenticated %}
+  <li><a class="item" href="{% url 'manager:my_profile' %}">My Profile</a></li>
+  <li>
+    <span class="title closed item">Accounts</span>
+      <ul>
+        <li><a href="{% url 'manager:accounts_list' %}" id="accounts" class="item">List</a></li>
+        <li><a href="{% url 'manager:account_order' %}"class="item">Order</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:account_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  <li>
+    <span class="title opened item">Systems</span>
+      <ul>
+        <li><a href="{% url 'manager:systems_list' %}" class="item active">List</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:system_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  
+  <li>
+    <span class="title closed item">Orders</span>
+      <ul>
+        <li><a href="{% url 'manager:orders_list' %}" class="item">List</a></li>
+        {% if user.is_approver or user.is_operator %}
+        <li><a href="{% url 'manager:order_manage' %}"class="item">Pending Approvals</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  
+  {% if user.is_adminstrator %}
+  <li>
+    <span class="title closed item">Admin Panel</span>
+      <ul>
+        <li><a href="{% url 'manager:area_list' %}"class="item">Manage Areas</a></li>
+        <li><a href="{% url 'manager:system_type_list' %}"class="item">Manage System Types</a></li>
+        <li><a href="{% url 'manager:approver_list' %}"class="item">Manage Approvers</a></li>
+      </ul>
+  </li>
+  {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block "content" %}
+ <!-- Application: Content -->
+        <div class="appcontent">
+          {% if message %} 
+          <div class="row">
+            <div style="background-color: rgb(194, 106, 106); color: black; padding: 20px; text-align: center; width: 100%;">
+              {{ message }}
+              {% if user.is_operator %}
+              <form id="statusForm"  method="POST" action="{% url 'manager:system_status_clear' system_name=system.name %}">
+                {% csrf_token %}
+  
+                <button type="submit" class="btn warning">clear message</button>
+              </form>
+              {% endif %}
+            </div>
+          </div>
+          {% endif %}
+          <!-- Row 1 -->
+          <div class="row" >
+
+            <!-- Tile 1 -->
+            <div class="tile sm-12 xl-2">
+              <div class="header">
+                <div class="left">
+                  <div class="title">{{ title1}}</div>
+                  <div class="subtitle">{{ subtitle1 }}</div> 
+                </div>
+              </div>
+              <div class="content">
+    
+                <div class="row" style="height: 35%; ">  
+                  <div class="column sm-12 md-6 lg-4">
+                    <div class="left">Name</div><br>
+                    <div class="left">Type</div><br>
+                    <div class="left">Area</div><br>
+                  </div>
+                  <div class="column sm-12 md-6 lg-4">
+                    <div class="right">{{system.name}}</div><br>
+                    <div class="right">{{system.type}}</div><br>
+                    <div class="right">{{system.area}}</div><br>               
+                  </div>
+                </div>
+                <br>
+                <div class="row">  
+                  <div class="column sm-12 md-6 lg-4">
+                    <div class="left">Status</div><br>
+                  </div>
+                  <div class="column sm-12 md-6 lg-4">
+                    <div class="right">{{status}}</div><br>
+                  </div>
+                </div>
+                <br>
+                   {% if version %} 
+                <div class="row">  
+                  <div class="title"><b>Version</b></div>
+                </div>
+                <div class="row"> 
+                  <div class="title">{{version}}</div>
+                </div>
+                <br>
+                {% endif %}
+                <br>
+                <div class="row">  
+                    <div class="title"><b>External links</b></div>
+                </div>
+                <div class="row" style="height: 20%;">  
+                  <div class="column sm-12 md-6 lg-4"></div>
+                  <div class="column sm-12 md-6 lg-4">
+                    {% if hydraLink %} 
+                    <div class="right"><a href="{{hydraLink}}"class="item" target="_blank">Hydra</a></div>
+                    {% endif %}
+                    {% if ditLink %} 
+                    <div class="right"><a href="{{ditLink}}"class="item" target="_blank">DIT</a></div>
+                    {% endif %}
+                    {% if dttLink %} 
+                    <div class="right"><a href="{{dttLink}}"class="item" target="_blank">DTT</a></div>
+                    {% endif %}
+                    {% if ddpLink %} 
+                    <div class="right"><a href="{{ddpLink}}"class="item" target="_blank">DDP</a></div>
+                    {% endif %}
+                    {% if monitoringLink %}
+                    <div class="right"><a href="{{monitoringLink}}"class="item" target="_blank">Monitoring</a></div>
+                    {% endif %}
+                    <br>
+                  </div>
+                  <div class="row" >
+                    <div class="column sm-12 md-6 lg-4"  style="position: relative ; bottom: 0; left: 0; ">
+                      {% if user.is_operator %}
+                        <br>
+                        <a href="{% url 'manager:system_manage' system_name=system.name %}" class="btn primary" style="position: absolute ; bottom: 0; left: 0;"><i class="icon"></i>Edit</a>
+                      {% endif %}
+                    </div>  
+                  </div>
+                  <div class="row">
+                    {% if user.is_operator %}
+                    <div class="column sm-12 md-6 lg-4">
+                    <a  class="btn primary" id="status-button"><i class="icon icon-loudspeaker"></i>Set status</a> 
+                    </div>
+                    {% endif %}
+                    
+                    <div class="column sm-12 md-6 lg-4">
+                    {% if user.is_operator or user.is_approver %}
+           
+                      <a  class="btn primary" id="email-button"><i class="icon icon-email"></i>Send e-mail</a> 
+                    {% endif %}
+                    </div>
+    
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <form id="emailForm"  method="POST" action="{% url 'manager:system_email_send' system_name=system.name %}">
+              {% csrf_token %}
+
+              {% include 'email-dialog-page.tmpl.html' %}
+            </form>
+            <form id="statusForm"  method="POST" action="{% url 'manager:system_status_set' system_name=system.name %}">
+              {% csrf_token %}
+
+              {% include 'status-dialog-page.tmpl.html' %}
+            </form>
+
+            <div class="tile sm-10 xl-10">
+              <div class="header">
+                <div class="left">
+                  <div class="title">{{ title2}}</div>
+                  <div class="subtitle">INFO</div> 
+                </div>
+              </div>
+              <div class="content" style="max-height: 350px; overflow-y: scroll;  overflow-x: hidden;">
+                <table class="table">
+                  <thead>
+                      <tr>
+                          <th>Parameter</th>
+                          <th>Value</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for key, value in doc2.items %}
+                          <tr>
+                            <td>{{ key }}</td>
+                            <td>{{ value }}</td>
+                          </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+              </div>
+            </div>
+
+        </div>
+          <!-- End Row 1 -->
+
+          <!-- Row 2 -->
+          <div class="row">
+            {% if accountList %}
+            <!-- Tile 3 -->
+            <div class="tile sm-12 md-12 lg-12 xl-12 filled">
+              <div class="header">
+                <div class="left">
+                <div class="title">Accounts</div>
+                  <div class="subtitle">List</div> 
+                                <!--filter-->
+              <div class="accordion lines">
+                <ul>
+                  <li tabindex="0">
+                    <div class="title" allin>Filters<i class="icon icon-filter"></i></div>
+                      
+                    <div class="content" style="max-height: 350px; overflow-y: scroll;  overflow-x: hidden;">
+                      <form method="get" class="eds-filter horizontal">
+                        <div class="filter-body">
+                          <div class="filter-group">
+                          {% for field in accountFilter.form %}
+                      
+                            <div class="filter-element">
+                              {% if field.auto_id != "id_systems" %}
+                              <label for="{{ field.auto_id }}">{{ field.label }}</label>  
+                              {{ field }}    
+                              {% endif %}                                 
+
+                            </div>
+                
+                          {% endfor %}
+                          </div>
+                    
+                          <div class="filter-footer">
+                            <a href="/system/{{system.name}}/details" class="btn">Reset Filter</a>
+                            <button type="submit" class="btn primary">Filter</button>
+                          </div>  
+                        </div>
+                      </form>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+                <!-- END OF FILTER-->
+                
+                  {% render_table accountTable %}
+                 
+            </div>
+            
+          </div>
+
+          </div>
+                   
+          {% endif %}             
+        </div>
+
+                    <div class="row">
+
+                    <!-- Tile 3 -->
+                    <div class="tile sm-6  xl-6 ">
+                      <div class="header">
+                        <div class="left">
+                         <div class="title">{{title4}}</div>
+                          <div class="subtitle">INFO</div> 
+                        </div>
+                      </div>
+                      <div class="content" style="max-height: 350px; overflow-y: scroll;  overflow-x: hidden;">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Username</th>
+                            <th>Last login</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for key, value in doc4.items %}
+                            <tr>
+                              <td>{{ key }}</td>
+                              <td>{{ value }}</td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      </div>
+                    </div>
+                     <!-- Tile 2 -->
+                     <div class="tile sm-6s lg-6 xl-6 ">
+                      <div class="header">
+                        <div class="left">
+                         <div class="title">{{title3}}</div>
+                          <div class="subtitle">INFO</div> 
+                        </div>
+                      </div>
+                      <div class="content" style="max-height: 350px; overflow-y: scroll;  overflow-x: hidden;">
+                        <table class="table">
+                          <thead>
+                              <tr>
+                                  <th>Parameter</th>
+                                  <th>Value</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              {% for key, value in doc3.items %}
+                                  <tr>
+                                    <td>{{ key }}</td>
+                                    <td>{{ value }}</td>
+                                  </tr>
+                              {% endfor %}
+                          </tbody>
+                      </table>
+                      </div>
+                    </div>
+        </div>
+{% endblock %}
+
+{% block "js" %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {  
+  const dialogEmailDOM = document.getElementById('email-dialog');
+  const dialogStatusDOM = document.getElementById('status-dialog');
+  const dialogEmailButton = document.getElementById('email-button');
+  const dialogStatusButton = document.getElementById('status-button');
+  const dialogEmailButtonSend = document.getElementById('send_mail');
+  const dialogStatusButtonSet = document.getElementById('set_status');
+
+    const dialogEmail = new eds.Dialog(dialogEmailDOM);
+    const dialogStatus = new eds.Dialog(dialogStatusDOM);
+    dialogEmail.init();
+
+    dialogEmailButton.addEventListener('click', function() {
+      dialogEmail.show();
+    });
+    dialogEmailButtonSend.addEventListener('click', function() {
+      dialogEmail.hide();
+    });
+
+    dialogStatus.init();
+    dialogStatusButton.addEventListener('click', function() {
+      dialogStatus.show();
+    });
+    dialogStatusButtonSet.addEventListener('click', function() {
+      dialogStatus.hide();
+    });
+  });
+</script>
+{% endblock %}

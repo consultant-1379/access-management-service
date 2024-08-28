@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>EDS Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="./style/eds.min.css" />
+</head>
+
+<body class="light">
+
+  <!-- System bar -->
+  <header class="sysbar">
+    <div class="items-container">
+      <div class="item">
+        <i class="icon icon-econ"></i>
+        <span class="product">DE TS Inventory tool</span>
+        <span class="acronym">DETS-IT</span>
+      </div>
+    </div>
+    <div class="items-container">
+      <div class="item notification-log-trigger">
+        <span class="notification-log-number"></span>
+        <i class="icon icon-notification"></i>
+        <i class="icon icon-notification-ring"></i>
+      </div>
+      <div class="item hover settings-trigger">
+        <i class="icon icon-profile"></i>
+        <span>Username</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- System panel -->
+    <aside class="syspanel hidden">
+
+      <!-- System panel: Settings -->
+      <div class="settings">
+        <div class="syspanel-top">
+          <span class="syspanel-title"></span>
+          <i class="syspanel-close icon icon-cross"></i>
+        </div>
+        <div class="row">
+          <div class="column sm-12 container">
+
+            <div class="profile">
+              <i class="icon icon-profile"></i>
+              <div class="username">Username</div>
+            </div>
+
+            <div class="content">
+              <div class="title">My settings</div>
+              <div class="item">
+                <div class="left">Switch theme</div>
+                <div class="right"></div>
+              </div>
+            </div>
+
+            <div class="bottom">
+              <button type="button" class="btn big"><i class="icon icon-logout"></i> Sign out</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- System panel: Notification log -->
+      <div class="notification-log">
+        <div class="syspanel-top">
+          <span class="syspanel-title">Notifications</span>
+          <i class="syspanel-close icon icon-cross"></i>
+        </div>
+        <div class="notification-log-container">
+          <div class="notification-log-empty">No new notifications.</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Application -->
+    <div class="app" id="app">
+
+      <!-- Application: Bar -->
+      <nav class="appbar">
+        <div class="actions-left">
+          <div class="item">
+            <i class="navigation-toggle closed"></i>
+          </div>
+          <div class="menu-anchor open-menu">Menu</div>
+          <div class="title open-menu">
+            <span class="title-name">Home</span>
+            <span class="subtitle">DE TS Inventory tool Home Page</span>
+          </div>
+        </div>
+        <div class="actions-right"></div>
+      </nav>
+
+      <div class="appbody">
+
+        <!-- Application: Navigation -->
+        <div class="appnav">
+          <div class="tree navigation">
+            <ul>
+              <li><span class="item active">DE TS Confluence Page</span></li>
+              <li><span class="item">External Links</span></li>
+
+              <li>
+                <span class="title closed item">NETWORKS</span>
+                <ul>
+                  <li><a class="item">N100</a></li>
+                  <li><a class="item">N102</a></li>
+                  <li><a class="item">N104</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+        <!-- Application: Content -->
+        <div class="appcontent">
+          <!-- Row 1 -->
+          <div class="row">
+
+            <!-- Tile 1 -->
+            <div class="tile sm-12">
+              <div class="header">
+                <div class="left">
+                  <div class="title">N100</div>
+                  <div class="subtitle">NETWORKD INFO</div>
+                </div>
+              </div>
+              <div class="content">
+                <div class="box"></div>
+              </div>
+            </div>
+
+          </div>
+          <!-- End Row 1 -->
+
+          <!-- Row 2 -->
+          <div class="row">
+
+            <!-- Tile 2 -->
+            <div class="tile sm-12 xl-6">
+              <div class="header">
+                <div class="left">
+                  <div class="title">CONNECTED ITEM</div>
+                  <div class="subtitle">ITEM INFO</div>
+                </div>
+              </div>
+              <div class="content">
+                <div class="box"></div>
+              </div>
+            </div>
+
+            <!-- Tile 3 -->
+            <div class="tile sm-12 xl-6">
+              <div class="header">
+                <div class="left">
+                  <div class="title">VPODS</div>
+                  <div class="subtitle">ITEM INFO</div>
+                </div>
+              </div>
+              <div class="content">
+                <div class="box"></div>
+              </div>
+            </div>
+
+          </div>
+          <!-- End Row 2 -->
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="./eds.min.js" charset="utf-8"></script>
+  <script src="app.js" charset="utf-8"></script>
+</body>
+
+</html>

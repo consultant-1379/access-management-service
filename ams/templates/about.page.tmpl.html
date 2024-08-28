@@ -1,0 +1,141 @@
+{% extends 'base.layout.tmpl.html' %}
+
+{% block "navi-bar" %}
+      <nav class="appbar">
+        <div class="actions-left">
+          <div class="item">
+            <i class="navigation-toggle closed"></i>
+          </div>
+          <div class="menu-anchor open-menu">Menu</div>
+          <div class="title open-menu">
+            <span class="title-name">About</span>
+            <span class="subtitle">info</span>
+          </div>
+        </div>
+        <div class="actions-right"></div>
+      </nav>
+{% endblock %}
+
+
+{% block  "navigation" %}
+  <li><a class="item" href="/">Home</a></li>
+  <li><a class="item active" href="/about">About</a></li>
+  {% if user.is_authenticated %}
+  <li><a class="item" href="{% url 'manager:my_profile' %}">My Profile</a></li>
+  <li>
+    <span class="title closeded item">Accounts</span>
+      <ul>
+        <li><a href="{% url 'manager:accounts_list' %}" id="accounts" class="item">List</a></li>
+        <li><a href="{% url 'manager:account_order' %}"class="item">Order</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:account_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  <li>
+    <span class="title closed item">Systems</span>
+      <ul>
+        <li><a href="{% url 'manager:systems_list' %}" class="item">List</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:system_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  
+  <li>
+    <span class="title closed item">Orders</span>
+      <ul>
+        <li><a href="{% url 'manager:orders_list' %}" class="item">List</a></li>
+        {% if user.is_approver or user.is_operator %}
+        <li><a href="{% url 'manager:order_manage' %}"class="item">Pending Approvals</a></li>
+        {% endif %}
+      </ul>
+  </li>
+
+  {% if user.is_pool_user or user.is_pool_admin %}
+  <li>
+    <span class="title closed item">Pool Environments</span>
+      <ul>
+        {% if user.is_pool_admin %}
+          <li><a href="{% url 'pool-test-environment:pool-data' %}" class="item">List</a></li>
+          <li><a href="{% url 'pool-test-environment:booking-requests' %}" class="item">Booking Requests</a></li>
+        {% endif %}
+        <li><a href="{% url 'pool-test-environment:my-pool-environments' %}" class="item">My Pool Environments</a></li>
+        <li><a href="{% url 'pool-test-environment:request-pool-environment' %}" class="item">Request Environment</a></li>
+      </ul>
+  </li>
+  {% endif %}
+  
+  {% if user.is_adminstrator %}
+  <li>
+    <span class="title closed item">Admin Panel</span>
+      <ul>
+        <li><a href="{% url 'manager:area_list' %}"class="item">Manage Areas</a></li>
+        <li><a href="{% url 'manager:system_type_list' %}"class="item">Manage System Types</a></li>
+        <li><a href="{% url 'manager:approver_list' %}"class="item">Manage Approvers</a></li>
+      </ul>
+  </li>
+  {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block "content" %}
+ <!-- Application: Content -->
+        <div class="appcontent">
+          <!-- Row 1 -->
+          <div class="row">
+
+            <!-- Tile 1 -->
+            <div class="tile sm-12">
+              <div class="header">
+                <div class="left">
+                  <div class="title">{{ title1}}</div>
+                  <div class="subtitle">{{ subtitle1 }}</div> 
+                </div>
+              </div>
+              <div class="content">
+                 <div class="box">{{ content1|safe  }}</div> 
+              </div>
+            </div>
+
+          </div>
+          <!-- End Row 1 -->
+
+          <!-- Row 2 -->
+          <div class="row">
+
+            <!-- Tile 2 -->
+            <div class="tile sm-12 xl-6">
+              <div class="header">
+                <div class="left">
+                 <div class="title">{{ title2 }}</div>
+                  <div class="subtitle">{{subtitle2 }}</div> 
+                </div>
+              </div>
+              <div class="content">
+                <div class="box">{{content2|safe }}</div> 
+              </div>
+            </div>
+
+            <!-- Tile 3 -->
+            <div class="tile sm-12 xl-6">
+              <div class="header">
+                <div class="left">
+                <div class="title">{{ title3 }}</div>
+                  <div class="subtitle">{{subtitle3 }}</div> 
+                </div>
+              </div>
+              <div class="content">
+                <div class="box">{{content3|safe }}</div> 
+              </div>
+            </div>
+
+          </div>
+          <!-- End Row 2 -->
+
+        </div>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

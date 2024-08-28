@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>STS NM AMS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="{% static 'node_modules/@eds/vanilla/eds.css' %}" />
+  <link rel="icon" type="image/svg+xml" href="{% static 'node_modules/@eds/vanilla/favicon.svg' %}">
+  <link rel="alternate icon" type="image/x-icon" href="{% static 'node_modules/@eds/vanilla/favicon.png' %}">
+  <link rel="mask-icon" href="{% static 'node_modules/@eds/vanilla/pinned-tab-icon.svg' %}" color="#242424">
+  {% block head %}
+
+  {% endblock %}  
+</head>
+
+<body class="light">
+  <!-- System bar -->
+  <header class="sysbar">
+    <div class="items-container">
+      <div class="item">
+        <i class="icon icon-econ"></i>
+        <span class="product">STS NM Access Management Service</span>
+        <span class="acronym">STS NM ASM</span>
+      </div>
+    </div>
+    <div class="items-container">
+      <div class="item notification-log-trigger">
+        <span class="notification-log-number"></span>
+        <i class="icon icon-notification"></i>
+        <i class="icon icon-notification-ring"></i>
+      </div>
+      <div class="item hover settings-trigger">
+        {% if user.is_authenticated %}
+          <i class="icon icon-profile"></i>
+          <span>{{ user.username }}</span>
+        {% else %}
+          <a href="{% url 'authentication:login' %}" class="btn big"><i class="icon icon-login"></i>Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- System panel -->
+    <aside class="syspanel hidden">
+
+      <!-- System panel: Settings -->
+      <div class="settings">
+        <div class="syspanel-top">
+          <span class="syspanel-title"></span>
+          <i class="syspanel-close icon icon-cross"></i>
+        </div>
+        <div class="row">
+          <div class="column sm-12 container">
+
+            <div class="profile">
+              <i class="icon icon-profile"></i>
+              <div class="username">{{ user.username }}</div>
+            </div>
+
+            <div class="content">
+              <div class="title">My info</div>
+              <div class="item">
+                <div class="left">My Roles</div>
+                <div></div>
+                <div class="right">
+                  {% if user.is_adminstrator %}<div class="item">Administrator</div> {% endif %}
+                  {% if user.is_operator %}<div class="item">Operator</div> {% endif %}
+                  {% if user.is_approver %}<div class="item">Approver</div> {% endif %}
+                </div>
+              </div>
+              <div class="title">Portal Settings</div>
+              <div class="item">
+                <div class="left">Switch theme</div>
+                <div class="right">
+                  <label class="switch" id="switch-button">
+                    <input type="checkbox">
+                    <i class="ball"></i>
+                    <span data-enabled="Dark" data-disabled="Light"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="bottom">
+              <a href="{% url 'authentication:logout' %}" class="btn big"><i class="icon icon-logout"></i>Sign out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- System panel: Notification log -->
+      <div class="notification-log">
+        <div class="syspanel-top">
+          <span class="syspanel-title">Notifications</span>
+          <i class="syspanel-close icon icon-cross"></i>
+        </div>
+        <div class="notification-log-container">
+          <div class="notification-log-empty">No new notifications.</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Application -->
+    <div class="app" id="app">
+
+      <!-- Application: Bar -->
+
+        {% block "navi-bar"%}
+
+        {% endblock %}
+
+      <div class="appbody">
+
+        <!-- Application: Navigation -->
+        <div class="appnav">
+          <div class="tree navigation">
+            <ul>
+              {% block "navigation" %}
+
+              {% endblock %}
+
+
+            </ul>
+          </div>
+        </div>
+
+
+        <!-- Application: Content -->
+        
+        {% block "content" %}
+
+        {% endblock %}
+
+      </div>
+    </div>
+  </main>
+
+    <script src="{% static 'node_modules/@eds/vanilla/eds.min.js' %}" charset="utf-8"></script>
+    <script src="{% static 'main.js' %}" charset="utf-8"></script>
+    
+    <script>
+      let loadedTheme = document.querySelector('body').classList;
+  
+      document.addEventListener('switchTheme', (event) => {
+        // switch theme for all componentss
+        document.body.classList.toggle('dark');
+        document.body.classList.toggle('light');
+        loadedTheme = event.detail.theme;
+      }, false);
+    </script>
+    
+    {% block "js" %}
+    
+    {% endblock %}
+</div>
+</body>
+</html>

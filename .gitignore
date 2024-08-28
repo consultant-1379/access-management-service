@@ -1,0 +1,12 @@
+hydra_token
+ams_vault.txt
+amsEnv
+amsEnv
+*.pip-cache
+*.log
+*.pot
+*.pyc
+*.log.*
+ams/static/node_modules
+__pycache__
+**/__pycache__

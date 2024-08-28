@@ -1,0 +1,201 @@
+{% extends 'base.layout.tmpl.html' %}
+{% load render_table from django_tables2 %} 
+{% load widget_tweaks %} 
+
+{% block "navi-bar" %}
+      <nav class="appbar">
+        <div class="actions-left">
+          <div class="item">
+            <i class="navigation-toggle closed"></i>
+          </div>
+          <div class="menu-anchor open-menu">Menu</div>
+          <div class="title open-menu">
+            <span class="title-name">AMS</span>
+            <span class="subtitle">Order</span>
+          </div>
+        </div>
+        <div class="actions-right"></div>
+      </nav>
+{% endblock %}
+
+
+{% block  "navigation" %}
+  <li><a class="item" href="/">Home</a></li>
+  <li><a class="item" href="/about">About</a></li>
+  {% if user.is_authenticated %}
+  <li><a class="item" href="{% url 'manager:my_profile' %}">My Profile</a></li>
+  <li>
+    <span class="title closed item">Accounts</span>
+      <ul>
+        <li><a href="{% url 'manager:accounts_list' %}" id="accounts" class="item">List</a></li>
+        <li><a href="{% url 'manager:account_order' %}"class="item">Order</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:account_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  <li>
+    <span class="title closed item">Systems</span>
+      <ul>
+        <li><a href="{% url 'manager:systems_list' %}" class="item">List</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:system_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  
+  <li>
+    <span class="title opened item">Orders</span>
+      <ul>
+        <li><a href="{% url 'manager:orders_list' %}" class="item">List</a></li>
+        {% if user.is_approver or user.is_operator %}
+        <li><a href="{% url 'manager:order_manage' %}"class="item">Pending Approvals</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  
+  {% if user.is_adminstrator %}
+  <li>
+    <span class="title closed item">Admin Panel</span>
+      <ul>
+        <li><a href="{% url 'manager:area_list' %}"class="item">Manage Areas</a></li>
+        <li><a href="{% url 'manager:system_type_list' %}"class="item">Manage System Types</a></li>
+        <li><a href="{% url 'manager:approver_list' %}"class="item">Manage Approvers</a></li>
+      </ul>
+  </li>
+  {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block "content" %}
+ <!-- Application: Content -->
+        <div class="appcontent">
+          <!-- Row 1 -->
+          <div class="row">
+
+            <!-- Tile 1 -->
+            <div class="tile sm-12 xl-2">
+              <div class="header">
+                <div class="left">
+                  <div class="title">{{ title1}}</div>
+                  <div class="subtitle">{{ subtitle1 }}</div> 
+                </div>
+              </div>
+              <div class="content">
+    
+                <div class="row">  
+                  <div class="column sm-12 md-6 lg-4">
+                    <div class="left">Jira Ticket:</div>
+                  </div>
+                  <div class="column sm-12 md-6 lg-4">
+                    <div class="right"><a href="/jira/{{order.jira_ticket }}/details">{{order.jira_ticket }}</a></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tile 3 -->
+            <div class="tile sm-12 xl-10">
+              <div class="header">
+                <div class="left">
+                  <div class="title">Accounts</div>
+                  <div class="subtitle">List</div> 
+                  {% render_table accountTable %}
+                </div>
+              </div>
+            </div>
+          </div>
+                  <!-- ENM accounts  -->
+        {% if enmaccountTable.rows%}
+        <div class="row">
+          <div class="tile sm-12 xl-2">
+            <div class="header">
+              <div class="left">
+                <div class="title">ENM accounts</div>
+              </div>
+            </div>
+            <div class="content">
+              <div class="row" >  
+                <div class="column sm-12 md-6 lg-4">
+                  <div class="left">Accounts and profiles</div>
+                  <div class="left"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tile sm-12 xl-10">
+            <div class="header">
+              <div class="left">
+                <div class="title">Accounts</div>
+                <div class="subtitle">List</div> 
+                {% render_table enmaccountTable %}
+              </div>
+            </div>
+          </div>
+      </div>
+      {% endif %}
+      <!-- EO accounts  -->
+      {% if eoaccountTable.rows %}
+      <div class="row">
+        <div class="tile sm-12 xl-2">
+          <div class="header">
+            <div class="left">
+              <div class="title">EO accounts</div>
+            </div>
+          </div>
+          <div class="content">
+            <div class="row" >  
+              <div class="column sm-12 md-6 lg-4">
+                <div class="left">Accounts and profiles</div>
+                <div class="left"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tile sm-12 xl-10">
+          <div class="header">
+            <div class="left">
+              <div class="title">Accounts</div>
+              <div class="subtitle">List</div> 
+              {% render_table eoaccountTable %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      <!-- EIC accounts  -->
+      {% if eicaccountTable.rows %}
+      <div class="row">
+        <div class="tile sm-12 xl-2">
+          <div class="header">
+            <div class="left">
+              <div class="title">EIC accounts</div>
+            </div>
+          </div>
+          <div class="content">
+            <div class="row" >  
+              <div class="column sm-12 md-6 lg-4">
+                <div class="left">Accounts and profiles</div>
+                <div class="left"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tile sm-12 xl-10">
+          <div class="header">
+            <div class="left">
+              <div class="title">Accounts</div>
+              <div class="subtitle">List</div> 
+              {% render_table eicaccountTable %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+       
+        </div>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

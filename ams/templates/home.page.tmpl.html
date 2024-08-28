@@ -1,0 +1,252 @@
+{% extends 'base.layout.tmpl.html' %}
+
+{% block "navi-bar" %}
+      <nav class="appbar">
+        <div class="actions-left">
+          <div class="item">
+            <i class="navigation-toggle closed"></i>
+          </div>
+          <div class="menu-anchor open-menu">Menu</div>
+          <div class="title open-menu">
+            <span class="title-name">Home</span>
+            <span class="subtitle">info</span>
+          </div>
+        </div>
+        <div class="actions-right"></div>
+      </nav>
+{% endblock %}
+
+
+{% block  "navigation" %}
+  <li><a class="item active" href="/">Home</a></li>
+  <li><a class="item" href="/about">About</a></li>
+  {% if user.is_authenticated %}
+  <li><a class="item" href="{% url 'manager:my_profile' %}">My Profile</a></li>
+  <li>
+    <span class="title closeded item">Accounts</span>
+      <ul>
+        <li><a href="{% url 'manager:accounts_list' %}" id="accounts" class="item">List</a></li>
+        <li><a href="{% url 'manager:account_order' %}"class="item">Order</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:account_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  <li>
+    <span class="title closed item">Systems</span>
+      <ul>
+        <li><a href="{% url 'manager:systems_list' %}" class="item">List</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:system_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  
+  <li>
+    <span class="title closed item">Orders</span>
+      <ul>
+        <li><a href="{% url 'manager:orders_list' %}" class="item">List</a></li>
+        {% if user.is_approver or user.is_operator %}
+        <li><a href="{% url 'manager:order_manage' %}"class="item">Pending Approvals</a></li>
+        {% endif %}
+      </ul>
+  </li>
+
+  {% if user.is_pool_user or user.is_pool_admin %}
+  <li>
+    <span class="title closed item">Pool Environments</span>
+      <ul>
+        {% if user.is_pool_admin %}
+          <li><a href="{% url 'pool-test-environment:pool-data' %}" class="item">List</a></li>
+          <li><a href="{% url 'pool-test-environment:booking-requests' %}" class="item">Booking Requests</a></li>
+        {% endif %}
+        <li><a href="{% url 'pool-test-environment:my-pool-environments' %}" class="item">My Pool Environments</a></li>
+        <li><a href="{% url 'pool-test-environment:request-pool-environment' %}" class="item">Request Environment</a></li>
+      </ul>
+  </li>
+  {% endif %}
+  
+  {% if user.is_adminstrator %}
+  <li>
+    <span class="title closed item">Admin Panel</span>
+      <ul>
+        <li><a href="{% url 'manager:area_list' %}"class="item">Manage Areas</a></li>
+        <li><a href="{% url 'manager:system_type_list' %}"class="item">Manage System Types</a></li>
+        <li><a href="{% url 'manager:approver_list' %}"class="item">Manage Approvers</a></li>
+      </ul>
+  </li>
+  {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block "content" %}
+ <!-- Application: Content -->
+        <div class="appcontent">
+          <!-- Row 1 -->
+          <div class="row">
+
+            <!-- Tile 1 -->
+            <div class="tile sm-12">
+              <div class="header">
+                <div class="left">
+                  <div class="title">Welcome</div>
+                  <div class="subtitle">to AMS</div> 
+                </div>
+              </div>
+              <div class="content">
+                 <div class="box">
+                    <div style="margin-left: 20px;">
+                      <h2>Welcome</h2>
+                      AMS (Access Management Service) is a self-service portal developed by STS NM DevOps team
+                      <br><br>
+                      The portal's main purpose is to allow users order and manage their account on STS NM systems.<br><br>
+                      These activities include:<br><br>
+                  <ul>
+                    <li>Ordering a new account</li>
+                    <li>Resetting existing accounts</li>
+                    <li>Searching DIT for deployment data</li>
+                    <li>Searching hydra for deployment data</li>
+                  </ul>
+
+                  <ul>
+                    <h3>NEW TO AMS?  Please start with the <a href="https://confluence-oss.seli.wh.rnd.internal.ericsson.com/display/CI/AMS+Manual" target="_blank">Manual.</a></h3>
+                  </ul>
+                  <ul>
+                      Something is not working? <a href="https://jira-oss.seli.wh.rnd.internal.ericsson.com/browse/DETS-25764" target="_blank">Report a bug</a>
+                  </ul>
+                      
+                    </div>
+                 </div> 
+              </div>
+            </div>
+
+          </div>
+          <!-- End Row 1 -->
+
+          <!-- Row 2 -->
+          <div class="row">
+
+            <!-- Tile 2 -->
+            <div class="tile sm-12 xl-6">
+              <div class="header">
+                <div class="left">
+                 <div class="title">version 1.2.0 5-04-2024</div>
+                  <div class="subtitle">ChangeLog</div>               
+                </div>
+              </div>
+              <div class="content">
+                <div class="box"><br>
+                  <ul><li><h3>version 1.2.0 5-04-2024</h3></li>
+                    Pooled Environments UI<br>
+                   </ul> 
+                  <ul><li><h3>version 1.1.3 20-03-2024</h3></li>
+                    Area added in Pending Approvals<br>
+                    User can now remove his last account and order it again<br>
+                    Updated link to Bug reporting<br>
+                   </ul>
+                  <ul><li><h3>version 1.1.1a 18-01-2024</h3></li>
+                    Pool Test Environment Init<br>
+                   </ul>
+                  <ul><li><h3>version 1.1.0 16-01-2024</h3></li>
+                    Sending mail to system users posible by operators and approvers<br>
+                    Custom system status possible to set by operators
+                   </ul>
+                  <ul><li><h3>version 1.0.0 4-01-2024</h3></li>
+                    Major fixes and improvments in UX
+                   </ul>
+                   <ul><li><h3>version 0.9.95 29-11-2023</h3></li>
+                    Legacy pENM support
+                   </ul>
+                   <ul><li><h3>version 0.9.9</h3></li>
+                    Password reset fix and logging
+                   </ul>
+                    <ul><li><h3>version 0.9.8</h3></li>
+                    Odering and accout creation improved form.<br>
+                    Auto adding approver to jira ticket
+                    </ul> 
+                    <ul><li><h3>version 0.9.7</h3></li>
+                    DDP links for vENM<br>
+                    vENM version display<br>
+                    Better handling for account orders<br>
+                    </ul> 
+                    <ul><li><h3>version 0.9.6</h3></li>
+                    Database backup mechanism<br>   
+                    </ul>
+                    <ul><li><h3>version 0.9.5</h3></li>
+                    CENM handling for deployment values<br>   
+                    </ul>
+                      <ul><li><h3>version 0.9.4</h3></li>
+                        Role Details display fix<br>   
+                    </ul>
+                      <ul><li><h3>version 0.9.3</h3></li>
+                      Logging to files enabled (LOG_LEVEL env added).<br>
+                      Fix for Approver modification view.   
+                      </ul>  
+
+                      <ul><li><h3>version 0.9.2</h3></li>
+                      User Profile creation, managment and display.<br>
+                      Small UI fixes in displayed tables.    
+                      </ul>   
+       
+              
+                      <ul><li><h3>version 0.9.1</h3></li>
+                      Small UI fixes
+                      </ul>
+                      <ul><li><h3>version 0.9.0</h3></li>
+                      Replicated functionality of User Portal
+                      </ul>
+                      <ul><li><h3>verison 0.0.3</h3></li>
+                      Added LDAP auth and usergroup mappings for roles
+                      </ul>
+                      <ul><li><h3>verison 0.0.2</h3></li>
+                      Adding https certs and connection over https
+                      </ul>
+                      <ul><li><h3>version 0.0.1</h3></li>
+                      BASE
+                      </ul>
+                      <br>
+                </div> 
+              </div>
+            </div>
+
+            <!-- Tile 3 -->
+            <div class="tile sm-12 xl-6">
+              <div class="header">
+                <div class="left">
+                <div class="title">{{ title3 }}</div>
+                  <div class="subtitle">{{subtitle3 }}</div> 
+                </div>
+              </div>
+              <div class="content">
+                <div class="box">
+                  <br>
+                  <ul>
+                    <li>
+                      <a href="https://confluence-oss.seli.wh.rnd.internal.ericsson.com/display/CI/AMS+Manual" target="_blank">AMS Manual</a>
+                    </li>
+                    <li>
+                    <a href="https://confluence-oss.seli.wh.rnd.internal.ericsson.com/display/CI/DE+TS+-+Access+Management+Service" target="_blank">AMS main confluence page</a>
+                    </li>
+                    <li>
+                      <a href="https://eteamproject.internal.ericsson.com/plugins/servlet/getsupport/support" target="_blank">eteamproject jira page</a>
+                    </li>
+                    <li>
+                      <a href="https://eteamproject.internal.ericsson.com/browse/DETS-25764" target="_blank">eteamproject TEMPLATE for issue reporting</a>
+                    </li>
+                    <li>
+                      <a href="https://gerrit.ericsson.se/#/q/project:DETES/com.ericsson.de.stsoss/access-management-service" target="_blank">AMS gerrit repository</a>
+                    </li>
+                  </ul>
+                </div> 
+              </div>
+            </div>
+
+          </div>
+          <!-- End Row 2 -->
+
+        </div>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

@@ -1,0 +1,211 @@
+{% extends 'base.layout.tmpl.html' %}
+{% load render_table from django_tables2 %} 
+{% load widget_tweaks %} 
+
+{% block "navi-bar" %}
+      <nav class="appbar">
+        <div class="actions-left">
+          <div class="item">
+            <i class="navigation-toggle closed"></i>
+          </div>
+          <div class="menu-anchor open-menu">Menu</div>
+          <div class="title open-menu">
+            <span class="title-name">AMS</span>
+            <span class="subtitle">Orders</span>
+          </div>
+        </div>
+        <div class="actions-right"></div>
+      </nav>
+{% endblock %}
+
+
+{% block  "navigation" %}
+  <li><a class="item" href="/">Home</a></li>
+  <li><a class="item " href="/about">About</a></li>
+                {% if user.is_authenticated %}
+                <li><a class="item" href="{% url 'manager:my_profile' %}">My Profile</a></li>
+              <li>
+                <span class="title closeded item">Accounts</span>
+                  <ul>
+                    <li><a href="{% url 'manager:accounts_list' %}" id="accounts" class="item">List</a></li>
+                    <li><a href="{% url 'manager:account_order' %}"class="item">Order</a></li>
+                    {% if user.is_operator %}
+                    <li><a href="{% url 'manager:account_add' %}"class="item">Add</a></li>
+                    {% endif %}
+                  </ul>
+              </li>
+              <li>
+                <span class="title closed item">Systems</span>
+                  <ul>
+                    <li><a class="item" href="{% url 'manager:systems_list' %}" class="item">List</a></li>
+                    {% if user.is_operator %}
+                    <li><a href="{% url 'manager:system_add' %}"class="item">Add</a></li>
+                    {% endif %}
+                  </ul>
+              </li>
+              
+              <li>
+                <span class="title opened item">Orders</span>
+                  <ul>
+                    <li><a href="{% url 'manager:orders_list' %}" class="item">List</a></li>
+                    {% if user.is_approver or user.is_operator %}
+                    <li><a href="{% url 'manager:order_manage' %}"class="item active">Pending Approvals</a></li>
+                    {% endif %}
+                  </ul>
+              </li>
+              
+              {% if user.is_adminstrator %}
+              <li>
+                <span class="title closed item">Admin Panel</span>
+                  <ul>
+                    <li><a href="{% url 'manager:area_list' %}"class="item">Manage Areas</a></li>
+                    <li><a href="{% url 'manager:system_type_list' %}"class="item">Manage System Types</a></li>
+                    <li><a href="{% url 'manager:approver_list' %}"class="item">Manage Approvers</a></li>
+                  </ul>
+              </li>
+              {% endif %}
+              {% endif %}
+{% endblock %}
+
+{% block "content" %}
+ <!-- Application: Content -->
+        <div class="appcontent">
+
+            <!-- Tile 1 -->
+            <div class="tile sm-12">
+              <div class="header">
+                <div class="left">
+                  <div class="title">{{ title1}}</div>
+                  <div class="subtitle">{{ subtitle1 }}</div> 
+                </div>
+              </div>
+              <div class="content">
+              <div class ="title"> Actions:</div>
+              <br>
+              <div class = "content">
+                <div class="row">
+                  <div class="row">
+                    {% if user.is_operator or user.is_approver or user.is_administrator %}   
+                    <a  class="btn primary" id="accept-warning"><i class="icon icon-plus"></i>Accept selected</a>                       
+                    <a  class="btn warning" id="decline-warning"><i class="icon icon-no-task"></i>Decline selected</a>
+                    {% endif %}
+                  </div>
+              </div>
+              <br><br>
+
+
+              <!--filter-->
+              <div class="accordion lines">
+                <ul>
+                  <li tabindex="0">
+                    <div class="title" allin>Filters<i class="icon icon-filter"></i></div>
+                    <form id="tableForm"  method="POST" action="{% url 'manager:order_accept' %}">
+                      {% csrf_token %}
+  
+                      {% include 'accept-dialog-page.tmpl.html' %}
+                    </form>
+                    <form id="tableForm"  method="POST" action="{% url 'manager:order_decline' %}">
+                      {% csrf_token %}
+  
+                      {% include 'decline-dialog-page.tmpl.html' %}
+                    </form>
+                    <div class="content">
+                      <form method="get" class="eds-filter horizontal">
+                        <div class="filter-body">
+                          <div class="filter-group">
+                          {% for field in approvalFilter.form %}
+                      
+                            <div class="filter-element">
+                              <label for="{{ field.auto_id }}">{{ field.label }}</label>  
+                              {{ field }}                                     
+
+                            </div>
+                
+                          {% endfor %}
+                          </div>
+                    
+                          <div class="filter-footer">
+                            <a href="{% url 'manager:order_manage' %}" class="btn">Reset Filter</a>
+                            <button type="submit" class="btn primary">Filter</button>
+                          </div>  
+                        </div>
+                      </form>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+                <!-- END OF FILTER-->
+                  {% render_table approvalTable %}
+
+              </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block "js" %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  
+const dialogAcceptDOM = document.getElementById('accept-dialog');
+const dialogDeclineDOM = document.getElementById('decline-dialog');
+const dialogAcceptButtons = document.querySelectorAll('button.accept-button');
+const dialogDeclineButtons = document.querySelectorAll('button.decline-button');
+const multiButtonAcccept = document.getElementById('accept-warning');
+const multiButtonDecline = document.getElementById('decline-warning');
+
+    $(document).ready(function() {
+        $('input[type="checkbox"]').on('change', function() {
+            var selectedRows = [];
+            var selectedColumnValues = [];
+            $('input[type="checkbox"]:checked').each(function() {
+                selectedRows.push($(this).val());
+                columnValue = $(this).closest('tr').find('td:nth(1)').text() + " on " + $(this).closest('tr').find('td:nth(6)').text() ;
+                selectedColumnValues.push(columnValue);
+            });
+            $('#selected-rows-a').val(selectedRows.join(','));
+            $('#selected-names-a').val(selectedColumnValues.join(','));
+            var selectedDataText = selectedColumnValues.join(', ');
+            $('#selectedData-a').text(selectedDataText);
+            $('#selected-rows-d').val(selectedRows.join(','));
+            $('#selected-names-d').val(selectedColumnValues.join(','));
+            var selectedDataText = selectedColumnValues.join(', ');
+            $('#selectedData-d').text(selectedDataText);
+            
+        });
+    });
+
+    const dialogAccept = new eds.Dialog(dialogAcceptDOM);
+    const dialogDecline = new eds.Dialog(dialogDeclineDOM);
+    dialogAccept.init();
+    dialogAcceptButtons.forEach(button => {
+      console.log("For each button");
+      button.addEventListener('click', () => {
+        $('#selected-rows-a').val(button.value);
+        $('#selected-names-a').val(button.name);
+        $('#selectedData-a').text(button.name);
+        dialogAccept.show();
+      });
+    });
+
+    dialogDecline.init();
+    dialogDeclineButtons.forEach(button => {
+      console.log("For each button");
+      button.addEventListener('click', () => {
+        $('#selected-rows-d').val(button.value);
+        $('#selected-names-d').val(button.name);
+        $('#selectedData-d').text(button.name);
+        dialogDecline.show();
+      });
+    });
+
+    dialogAcceptDOM.querySelector('button.warning').addEventListener('click', () => {
+      dialog.hide();
+    });
+
+    dialogDeclineDOM.querySelector('button.warning').addEventListener('click', () => {
+      dialog.hide();
+    });
+
+</script>
+
+{% endblock %}

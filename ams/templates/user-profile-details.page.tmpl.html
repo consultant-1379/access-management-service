@@ -1,0 +1,122 @@
+{% extends 'base.layout.tmpl.html' %}
+{% load render_table from django_tables2 %} 
+{% load widget_tweaks %} 
+
+{% block "navi-bar" %}
+      <nav class="appbar">
+        <div class="actions-left">
+          <div class="item">
+            <i class="navigation-toggle closed"></i>
+          </div>
+          <div class="menu-anchor open-menu">Menu</div>
+          <div class="title open-menu">
+            <span class="title-name">AMS</span>
+            <span class="subtitle">User Profile</span>
+          </div>
+        </div>
+        <div class="actions-right"></div>
+      </nav>
+{% endblock %}
+
+
+{% block  "navigation" %}
+  <li><a class="item" href="/">Home</a></li>
+  <li><a class="item" href="/about">About</a></li>
+  {% if user.is_authenticated %}
+  <li><a class="item" href="{% url 'manager:my_profile' %}">My Profile</a></li>
+  <li>
+    <span class="title closed item">Accounts</span>
+      <ul>
+        <li><a href="{% url 'manager:accounts_list' %}" id="accounts" class="item">List</a></li>
+        <li><a href="{% url 'manager:account_order' %}"class="item">Order</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:account_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  <li>
+    <span class="title closed item">Systems</span>
+      <ul>
+        <li><a href="{% url 'manager:systems_list' %}" class="item">List</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:system_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  
+  <li>
+    <span class="title closed item">Orders</span>
+      <ul>
+        <li><a href="{% url 'manager:orders_list' %}" class="item">List</a></li>
+        {% if user.is_approver or user.is_operator %}
+        <li><a href="{% url 'manager:order_manage' %}"class="item">Pending Approvals</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  
+  {% if user.is_adminstrator %}
+  <li>
+    <span class="title opened item">Admin Panel</span>
+      <ul>
+        <li><a href="{% url 'manager:area_list' %}"class="item">Manage Areas</a></li>
+        <li><a href="{% url 'manager:system_type_list' %}"class="item active">Manage System Types</a></li>
+        <li><a href="{% url 'manager:approver_list' %}"class="item">Manage Approvers</a></li>
+      </ul>
+  </li>
+  {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block "content" %}
+ <!-- Application: Content -->
+        <div class="appcontent">
+          <!-- Row 1 -->
+          <div class="row">
+
+            <!-- Tile 1 -->
+            <div class="tile xl-12">
+              <div class="header">
+                <div class="left">
+                  <div class="title">{{ title1}}</div>
+                  <div class="subtitle">{{ subtitle1 }}</div> 
+                </div>
+              </div>
+              <div class="content">
+    
+                <div class="row">  
+                  <div class="column sm-12 md-6 lg-2">
+                    <div class="left">Name</div>
+                  </div>
+                  <div class="column sm-12 md-6 lg-4">
+                    <div class="right">{{profile_name}}</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="column sm-12 md-6 lg-2">
+                    <div class="left">Type</div>
+                  </div>
+                  <div class="column sm-12 md-6 lg-2">
+                    <div class="right">{{system_type_group_name}}</div>
+                  </div>  
+                </div> 
+                <div class="row">             
+                  <div class="column sm-12 md-6 lg-2">
+                    <div class="left">Role list:</div>
+                  </div>
+                  <div class="column sm-12 md-6 lg-4">
+                    <div class="right">
+                    {%  for  role in role_list %}
+                    {{role}}<br>
+                    {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>   
+      </div>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

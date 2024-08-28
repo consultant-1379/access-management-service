@@ -1,0 +1,288 @@
+{% extends 'base.layout.tmpl.html' %}
+{% load render_table from django_tables2 %} 
+{% load widget_tweaks %} 
+
+{% block "navi-bar" %}
+      <nav class="appbar">
+        <div class="actions-left">
+          <div class="item">
+            <i class="navigation-toggle closed"></i>
+          </div>
+          <div class="menu-anchor open-menu">Menu</div>
+          <div class="title open-menu">
+            <span class="title-name">AMS</span>
+            <span class="subtitle">System Types</span>
+          </div>
+        </div>
+        <div class="actions-right"></div>
+      </nav>
+{% endblock %}
+
+
+{% block  "navigation" %}
+  <li><a class="item" href="/">Home</a></li>
+  <li><a class="item" href="/about">About</a></li>
+  {% if user.is_authenticated %}
+  <li><a class="item" href="{% url 'manager:my_profile' %}">My Profile</a></li>
+  <li>
+    <span class="title closed item">Accounts</span>
+      <ul>
+        <li><a href="{% url 'manager:accounts_list' %}" id="accounts" class="item">List</a></li>
+        <li><a href="{% url 'manager:account_order' %}"class="item">Order</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:account_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  <li>
+    <span class="title closed item">Systems</span>
+      <ul>
+        <li><a href="{% url 'manager:systems_list' %}" class="item">List</a></li>
+        {% if user.is_operator %}
+        <li><a href="{% url 'manager:system_add' %}"class="item">Add</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  
+  <li>
+    <span class="title closed item">Orders</span>
+      <ul>
+        <li><a href="{% url 'manager:orders_list' %}" class="item">List</a></li>
+        {% if user.is_approver or user.is_operator %}
+        <li><a href="{% url 'manager:order_manage' %}"class="item">Pending Approvals</a></li>
+        {% endif %}
+      </ul>
+  </li>
+  
+  {% if user.is_adminstrator %}
+  <li>
+    <span class="title opened item">Admin Panel</span>
+      <ul>
+        <li><a href="{% url 'manager:area_list' %}"class="item">Manage Areas</a></li>
+        <li><a href="{% url 'manager:system_type_list' %}"class="item active">Manage System Types</a></li>
+        <li><a href="{% url 'manager:approver_list' %}"class="item">Manage Approvers</a></li>
+      </ul>
+  </li>
+  {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block "content" %}
+ <!-- Application: Content -->
+        <div class="appcontent">
+          <!-- Row 1 -->
+          <div class="row">
+
+            <!-- Tile 1 -->
+            <div class="tile sm-12 xl-2">
+              <div class="header">
+                <div class="left">
+                  <div class="title">{{ title1}}</div>
+                  <div class="subtitle">{{ subtitle1 }}</div> 
+                </div>
+              </div>
+              <div class="content">
+    
+                <div class="row">  
+                  <div class="column sm-12 md-6 lg-4">
+                    <div class="left">Name</div>
+                  </div>
+                  <div class="column sm-12 md-6 lg-4">
+                    <div class="right">{{systemType.name}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tile 3 -->
+            <div class="tile sm-12 xl-10 ">
+              <div class="header">
+                <div class="left">
+                <div class="title">Systems</div>
+                  <div class="subtitle">List</div> 
+                                <!--filter-->
+              <div class="accordion lines">
+                <ul>
+                  <li tabindex="0">
+                    <div class="title" allin>Filters<i class="icon icon-filter"></i></div>
+                      
+                    <div class="content" style="max-height: 350px; overflow-y: scroll;  overflow-x: hidden;">
+                      <form method="get" class="eds-filter horizontal">
+                        <div class="filter-body">
+                          <div class="filter-group">
+                          {% for field in systemFilter.form %}
+                      
+                            <div class="filter-element">
+                              <label for="{{ field.auto_id }}">{{ field.label }}</label>  
+                              {{ field }}                                     
+
+                            </div>
+                
+                          {% endfor %}
+                          </div>
+                    
+                          <div class="filter-footer">
+                            <a href="/system-type/{{systemType.name}}/details" class="btn">Reset Filter</a>
+                            <button type="submit" class="btn primary">Filter</button>
+                          </div>  
+                        </div>
+                      </form>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+                <!-- END OF FILTER-->
+                  {% render_table systemTable %}
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+      <div class="row">
+        <div class="tile sm-12  ">
+          <div class="header">
+            <div class="left">
+            <div class="title">Pofiles</div>
+              <div class="subtitle">List</div> 
+
+          {% if user.is_operator %}
+                <div>
+                  <br>
+                  <a href="/system-type/{{systemType.name}}/add_profile" class="btn primary"><i class="icon icon-plus"></i>Add profile</a>
+                  <a href="/system-type/{{systemType.name}}/add_role" class="btn primary"><i class="icon icon-plus"></i>Add role</a>
+                  <form id="tableForm"  method="POST" action="">
+                    <input type="hidden" id="system_type" name="system_type" value="{{systemType.name}}">
+                    {% csrf_token %}
+
+                    {% include 'confirm-dialog-page.tmpl.html' %}
+                  </form>
+            
+                  <br>
+                </div>
+
+          {% endif %}
+          
+        </div>
+      </div>
+      <br><br>
+          <div class="accordion lines">
+            <ul>
+              <li tabindex="0">
+                <div class="title" allin>Filters<i class="icon icon-filter"></i></div>
+                  
+                <div class="content" style="max-height: 350px; overflow-y: scroll;  overflow-x: hidden;">
+                  <form method="get" class="eds-filter horizontal">
+                    <div class="filter-body">
+                      <div class="filter-group">
+                      {% for field in profileFilter.form %}
+                  
+                        <div class="filter-element">
+                          <label for="{{ field.auto_id }}">{{ field.label }}</label>  
+                          {{ field }}                                     
+
+                        </div>
+            
+                      {% endfor %}
+                      </div>
+                
+                      <div class="filter-footer">
+                        <a href="/system-type/{{systemType.name}}/details" class="btn">Reset Filter</a>
+                        <button type="submit" class="btn primary">Filter</button>
+                      </div>  
+                    </div>
+                  </form>
+                </div>
+              </li>
+            </ul>
+          </div>
+            <!-- END OF FILTER-->  
+        {% render_table profileTable %}
+      </div>
+      </div>
+     
+      </div>
+{% endblock %}
+
+{% block "js" %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  
+const dialogDOM = document.getElementById('confirm-dialog');
+const dialogButtons = document.querySelectorAll('button.dialog-button');
+const multiButton = document.getElementById('open-warning');
+const formDOM = document.getElementById('tableForm');
+
+    $(document).ready(function() {
+        $('input[type="checkbox"]').on('change', function() {
+            var selectedRows = [];
+            var selectedColumnValues = [];
+            $('input[type="checkbox"]:checked').each(function() {
+                selectedRows.push($(this).val());
+                columnValue = $(this).closest('tr').find('td:first').text();
+                selectedColumnValues.push(columnValue);
+            });
+            $('#selected-rows').val(selectedRows.join(','));
+            $('#selected-names').val(selectedColumnValues.join(','));
+            var selectedDataText = selectedColumnValues.join(', ');
+            $('#selectedData').text(selectedDataText);
+            
+        });
+    });
+
+    const dialog = new eds.Dialog(dialogDOM);
+    dialog.init();
+    dialogButtons.forEach(button => {
+      if (button.classList.contains("enm")) {
+        var action_to_set="/system-type/user_profile_remove_enm"
+      }
+      if (button.classList.contains("eo")) {
+        var action_to_set="/system-type/user_profile_remove_eo"
+      }
+      if (button.classList.contains("eic")) {
+        var action_to_set="/system-type/user_profile_remove_eic"
+      }
+      if (button.classList.contains("system")) {
+        var action_to_set="/system/remove"
+      }
+      button.addEventListener('click', () => {
+        $('#selected-rows').val(button.value);
+        $('#selected-names').val(button.name);
+        $('#selectedData').text(button.name);
+        formDOM.action = action_to_set
+        dialog.show();
+      });
+    });
+
+    dialogDOM.querySelector('button.warning').addEventListener('click', () => {
+      dialog.hide();
+    });
+
+</script>
+
+<script>
+$(document).ready(function() {
+    // Define the column name you want to hide
+    var columnNameToHide = "Selection";
+
+    // Find all tables on the page
+    $("table").each(function() {
+        var table = $(this);
+
+        // Find the header cell with the column name
+        var headerCell = table.find("th:contains('" + columnNameToHide + "')");
+
+        if (headerCell.length > 0) {
+            // Get the index of the header cell
+            var columnIndex = headerCell.index();
+
+            // Hide the header cell and its corresponding data cells in each row
+            headerCell.hide();
+            table.find("tr").each(function() {
+                $(this).find("td:eq(" + columnIndex + ")").hide();
+            });
+        }
+    });
+});
+  </script>
+{% endblock %}

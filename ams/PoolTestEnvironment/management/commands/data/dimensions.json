@@ -1,0 +1,50 @@
+{
+    "dmm": {
+        "cpu_required": 60,
+        "memory_required": 140
+    },
+    "adc": {
+        "cpu_required": 0,
+        "memory_required": 0
+    },
+    "eas": {
+        "cpu_required": 0,
+        "memory_required": 0
+    },
+    "ch": {
+        "cpu_required": 0,
+        "memory_required": 0
+    },
+    "th": {
+        "cpu_required": 0,
+        "memory_required": 0
+    },
+    "appmgr": {
+        "cpu_required": 50,
+        "memory_required": 100
+    },
+    "ta": {
+        "cpu_required": 0,
+        "memory_required": 0
+    },
+    "os": {
+        "cpu_required": 0,
+        "memory_required": 0
+    },
+    "pmh": {
+        "cpu_required": 0,
+        "memory_required": 0
+    },
+    "ml": {
+        "cpu_required": 0,
+        "memory_required": 0
+    },
+    "tieh": {
+        "cpu_required": 0,
+        "memory_required": 0
+    },
+    "sef": {
+        "cpu_required": 5,
+        "memory_required": 10
+    }
+}

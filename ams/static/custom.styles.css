@@ -1,0 +1,257 @@
+.dark .signin {
+    color: #f2f2f2;
+    height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    overflow: auto;
+    background: #0c0c0c;
+    -webkit-transition: opacity 1s ease-in-out 0ms;
+    transition: opacity 1s ease-in-out 0ms;
+  }
+  .dark .signin.hidden {
+    opacity: 0;
+  }
+  .dark .signin .watermark {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    padding: 64px 0 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    outline: none;
+  }
+  .dark .signin .watermark .icon {
+    font-size: 43px;
+    outline: none;
+  }
+  .dark .signin .watermark .product {
+    font-size: 18px;
+    font-weight: 400;
+    padding: 10px 0 0 4px;
+    display: inline;
+    outline: none;
+  }
+  .dark .signin .welcome,
+  .dark .signin .waiting {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-flex: 2;
+        -ms-flex: 2;
+            flex: 2;
+    -ms-flex-item-align: center;
+        align-self: center;
+    text-align: center;
+    opacity: 1;
+    -webkit-transition: opacity 1s ease-in-out 0ms, -webkit-box-flex 0ms ease-in-out 50ms;
+    transition: opacity 1s ease-in-out 0ms, -webkit-box-flex 0ms ease-in-out 50ms;
+    transition: flex 0ms ease-in-out 50ms, opacity 1s ease-in-out 0ms;
+    transition: flex 0ms ease-in-out 50ms, opacity 1s ease-in-out 0ms, -webkit-box-flex 0ms ease-in-out 50ms, -ms-flex 0ms ease-in-out 50ms;
+  }
+  .dark .signin .welcome.hidden,
+  .dark .signin .waiting.hidden {
+    opacity: 0;
+    height: 0;
+    -webkit-box-flex: 0;
+        -ms-flex: 0;
+            flex: 0;
+    overflow: hidden;
+  }
+  .dark .signin .welcome .message,
+  .dark .signin .waiting .message {
+    font-size: 28px;
+    font-weight: 100;
+  }
+  .dark .signin .welcome .username,
+  .dark .signin .waiting .username {
+    font-size: 48px;
+  }
+  .dark .signin .welcome .loading,
+  .dark .signin .waiting .loading {
+    -ms-flex-item-align: center;
+        align-self: center;
+    margin-top: 24px;
+    margin-left: -32px;
+  }
+  .dark .signin .error {
+    -ms-flex-item-align: center;
+        align-self: center;
+    text-align: left;
+    padding: 16px 0;
+    width: 280px;
+  }
+  .dark .signin .error.hidden {
+    display: none;
+  }
+  .dark .signin .error::before {
+    color: #dc2d37;
+    content: "\e9b2";
+    padding-right: 8px;
+    font-family: "Ericsson Icons" !important;
+    vertical-align: middle;
+  }
+  .dark .signin form {
+    -webkit-box-flex: 2;
+        -ms-flex: 2;
+            flex: 2;
+    -ms-flex-item-align: center;
+        align-self: center;
+    width: 280px;
+  }
+  .dark .signin form.hidden {
+    display: none;
+  }
+  .dark .signin form .field {
+    margin-bottom: 16px;
+  }
+  .dark .signin form label {
+    color: #f2f2f2;
+  }
+  .dark .signin form input:not([type="checkbox"]) {
+    background: #181818;
+    border-color: #767676;
+    color: #f2f2f2;
+    font-weight: 300;
+    width: 100%;
+  }
+  .dark .signin form input:not([type="checkbox"]):focus:not([disabled]):not([readonly]) {
+    border-color: #8e45b0;
+  }
+  .dark .signin form input:not([type="checkbox"])::-webkit-input-placeholder {
+    color: #8b8b8b;
+  }
+  .dark .signin form input:not([type="checkbox"])::-moz-placeholder {
+    color: #8b8b8b;
+  }
+  .dark .signin form input:not([type="checkbox"])::-ms-input-placeholder {
+    color: #8b8b8b;
+  }
+  .dark .signin form input:not([type="checkbox"])::placeholder {
+    color: #8b8b8b;
+  }
+  .dark .signin form input:not([type="checkbox"]).validation:invalid {
+    border-color: #dc2d37;
+  }
+  .dark .signin form input.validation + .validation-msg {
+    color: #f2f2f2;
+  }
+  .dark .signin form input.validation + .validation-msg::before {
+    color: #dc2d37;
+  }
+  .dark .signin form input[type="checkbox"] + label {
+    margin: 16px 0 32px;
+  }
+  .dark .signin form input[type="checkbox"]:focus::before {
+    outline: solid 1px #0077db;
+  }
+  .dark .signin form input[type="checkbox"]:not(:checked):not(:indeterminate):not(:disabled) + label::before {
+    content: " ";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: bottom;
+    background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICAgIDxwYXRoIGZpbGw9IiMxODE4MTgiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlPSIjNzY3Njc2IiBkPSJNMC41IDAuNUgxNS41VjE1LjVIMC41eiIvPgo8L3N2Zz4K") no-repeat 100% center;
+  }
+  .dark .signin form input[type="checkbox"]:checked:not(:disabled) + label::before {
+    content: " ";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: bottom;
+    background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZmlsbD0iIzAwNzdEQiIgZD0iTTAgMEgxNlYxNkgweiIvPgogICAgICAgIDxwYXRoIGZpbGw9IiNGMkYyRjIiIGQ9Ik0xMC45IDRMNi42IDguODAxIDQuNCA2LjYgMyA4IDYuNyAxMS44IDEyLjM5OSA1LjQwMXoiLz4KICAgIDwvZz4KPC9zdmc+Cg==") no-repeat 100% center;
+  }
+  .dark .signin form input[type="checkbox"]:checked:disabled + label::before {
+    content: " ";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: bottom;
+    background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZmlsbD0iIzAyNjdCQyIgZD0iTTAgMEgxNlYxNkgweiIvPgogICAgICAgIDxwYXRoIGZpbGw9IiNGMkYyRjIiIGQ9Ik0xMC45IDRMNi42IDguODAxIDQuNCA2LjYgMyA4IDYuNyAxMS44IDEyLjM5OSA1LjQwMXoiLz4KICAgIDwvZz4KPC9zdmc+Cg==") no-repeat 100% center;
+  }
+  .dark .signin form input[type="checkbox"]:checked:not(:disabled):hover + label::before {
+    content: " ";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: bottom;
+  }
+  .dark .signin form input[type="checkbox"]:not(:disabled):hover + label::before {
+    content: " ";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: bottom;
+  }
+  .dark .signin form .btn {
+    width: 100%;
+    margin-bottom: 32px;
+  }
+  .dark .signin .help {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    text-align: center;
+  }
+  .dark .signin .footer {
+    width: 900px;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 108px;
+            flex: 0 0 108px;
+    -ms-flex-item-align: center;
+        align-self: center;
+    text-align: center;
+    opacity: 0.4;
+  }
+  .dark .signin a.subtle-link {
+    color: #f2f2f2;
+    border-bottom: 1px dashed #f2f2f2;
+  }
+  .dark .signin a.subtle-link:hover {
+    border-bottom: 1px solid #0077db;
+  }
+  @media only screen and (min-width: 30em) {
+    .dark .signin .watermark {
+      padding: 110px 0 24px 110px;
+      -webkit-box-pack: left;
+          -ms-flex-pack: left;
+              justify-content: left;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+          -ms-flex-direction: column;
+              flex-direction: column;
+    }
+    .dark .signin .watermark .icon {
+      font-size: 55px;
+    }
+    .dark .signin .watermark .product {
+      display: block;
+      font-size: 16px;
+      padding: 16px 0 0 4px;
+      width: 100px;
+    }
+  }
+  .message.success {
+      color: #3cb371;
+  }
+  
+  .message.error {
+      color: #ff4a47;
+  }
+  
+  

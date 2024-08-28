@@ -1,0 +1,27 @@
+<div class="dialog" data-trigger="#accept-warning" data-type="simple" id="accept-dialog">
+  <div class="content">
+    <div class="top">
+      <div class="title">Do you want to accept following?</div>
+    </div>
+    <div class="row form-body">
+      <div class="column sm-12 md-12 lg-6">
+      <br>
+      <p>List: <br>
+        <div id="selectedData-a">None</div>
+        <input type="hidden" id="selected-rows-a" name="selected_rows" value="">
+        <div class="form-element">
+          <input type="hidden" id="selected-names-a" name="selected_names" value="">
+        </div>
+        <br>
+        <div class="form-element">
+        <label for="comment">Add comment (optional)</label>
+          <textarea type="text" id="comment" name="comment" type="text"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <a href="" class="btn" data-close="true">Cancel</a>
+      <button type="submit" class="btn warning">Accept Item(s)</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  haproxy:
+    container_name: haproxy
+    image: armdocker.rnd.ericsson.se/dockerhub-ericsson-remote/haproxy:lts-alpine3.16
+    restart: always
+    volumes:
+      - /var/container_data/haproxy:/usr/local/etc/haproxy
+    ports:
+      - 8405:8405
+      - 80:80
+      - 443:443
+
